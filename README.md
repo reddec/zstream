@@ -52,11 +52,13 @@ After build you can use one of following method:
 
 # Usage
 
-`zstream [-m mode][-c][-l line-size][-t tokens] <endpoint>`
+`zstream [-m mode][-c][-l line-size][-t tokens][-p text][-a text] <endpoint>`
 
 * `endpoint`     - ZMQ endpoint string (like: `tcp://localhost:9001`)
 * `-m mode`      - ZMQ socket mode: pub, sub
 * `-l line-size` - positive integer as size in bytes of line buffer (default 65K)
 * `-t tokens`    - characters which will be used as delimiters (same as in [strtok(3)](http://linux.die.net/man/3/strtok))
+* `-a text`      - append parts for each message (repeated field)
+* `-p text`      - prepend parts for each message (repeated field)
 * `-s`           - become as server (bind and listen)
 * `-h`           - show help
