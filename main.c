@@ -8,13 +8,25 @@
 extern char *optarg;
 extern int optind;
 
-void summary(const char *comamnd) {
-
+void summary(const char *command) {
+    printf("zstream 1.0.0\n");
+    printf("June 2016\n");
+    printf("\n");
+    printf("Usage:\n");
+    printf("%s [-m mode][-s][-l line-size][-t tokens] <endpoint>\n", command);
+    printf("\n");
+    printf("  endpoint     ZMQ endpoint string (like: tcp://localhost:9001)\n");
+    printf("  -m mode      ZMQ socket mode: pub, sub (default: pub)\n");
+    printf("  -l line-size positive integer as size in bytes of line buffer (default 65K)\n");
+    printf("  -t tokens    characters which will be used as delimiters (same as in strtok)\n");
+    printf("  -s           become as server (bind and listen)\n");
+    printf("\n");
+    printf("Copyright: zstream 2016 Baryshnikov Alexander <dev@baryshnikov.net>\n");
 }
 
 int main(int argc, char *const *argv) {
     int max_line_size = 65535;
-    bool is_server = true;
+    bool is_server = false;
     int type = ZMQ_PUB; //ZMQ_PUSH
     char *tokens = " ";
     char *endpoint;
@@ -29,8 +41,8 @@ int main(int argc, char *const *argv) {
                     return 1;
                 }
                 break;
-            case 'c':
-                is_server = false;
+            case 's':
+                is_server = true;
                 break;
             case 'm':
                 if (strcmp(optarg, "pub") == 0)
@@ -52,6 +64,7 @@ int main(int argc, char *const *argv) {
     };
     if (optind >= argc) {
         fprintf(stderr, "required parameter endpoint not provided\n");
+        summary(argv[0]);
         return 1;
     }
     endpoint = argv[optind];
