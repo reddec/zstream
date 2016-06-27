@@ -81,7 +81,7 @@ int main(int argc, char *const *argv) {
     char *endpoint;
     list_t *prepend = NULL, *append = NULL;
     int rez = 0;
-    while ((rez = getopt(argc, argv, "l:cm:t:ha:p:")) != -1) {
+    while ((rez = getopt(argc, argv, "l:sm:t:ha:p:")) != -1) {
         switch (rez) {
             case 'l':
                 max_line_size = atoi(optarg);
