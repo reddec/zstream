@@ -13,13 +13,14 @@ void summary(const char *command) {
     printf("June 2016\n");
     printf("\n");
     printf("Usage:\n");
-    printf("%s [-m mode][-s][-l line-size][-t tokens] <endpoint>\n", command);
+    printf("%s [-m mode][-s][-h][-l line-size][-t tokens] <endpoint>\n", command);
     printf("\n");
     printf("  endpoint     ZMQ endpoint string (like: tcp://localhost:9001)\n");
     printf("  -m mode      ZMQ socket mode: pub, sub (default: pub)\n");
     printf("  -l line-size positive integer as size in bytes of line buffer (default 65K)\n");
     printf("  -t tokens    characters which will be used as delimiters (same as in strtok)\n");
     printf("  -s           become as server (bind and listen)\n");
+    printf("  -h           show this help and exit\n");
     printf("\n");
     printf("Copyright: zstream 2016 Baryshnikov Alexander <dev@baryshnikov.net>\n");
 }
@@ -32,7 +33,7 @@ int main(int argc, char *const *argv) {
     char *endpoint;
 
     int rez = 0;
-    while ((rez = getopt(argc, argv, "l:cm:t:")) != -1) {
+    while ((rez = getopt(argc, argv, "l:cm:t:h")) != -1) {
         switch (rez) {
             case 'l':
                 max_line_size = atoi(optarg);
@@ -57,6 +58,9 @@ int main(int argc, char *const *argv) {
             case 't':
                 tokens = optarg;
                 break;
+            case 'h':
+                summary(argv[0]);
+                return 0;
             default:
                 summary(argv[0]);
                 return 1;
