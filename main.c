@@ -5,12 +5,58 @@
 #include <memory.h>
 #include <getopt.h>
 
-int main(int argc, const char **argv) {
-    const char *endpoint = "tcp://*:9001";
+extern char *optarg;
+extern int optind;
+
+void summary(const char *comamnd) {
+
+}
+
+int main(int argc, char *const *argv) {
     int max_line_size = 65535;
     bool is_server = true;
     int type = ZMQ_PUB; //ZMQ_PUSH
-    const char *tokens = " ";
+    char *tokens = " ";
+    char *endpoint;
+
+    int rez = 0;
+    while ((rez = getopt(argc, argv, "l:cm:t:")) != -1) {
+        switch (rez) {
+            case 'l':
+                max_line_size = atoi(optarg);
+                if (max_line_size <= 0) {
+                    fprintf(stderr, "line size must have positive value\n");
+                    return 1;
+                }
+                break;
+            case 'c':
+                is_server = false;
+                break;
+            case 'm':
+                if (strcmp(optarg, "pub") == 0)
+                    type = ZMQ_PUB;
+                else if (strcmp(optarg, "push") == 0)
+                    type = ZMQ_PUSH;
+                else {
+                    fprintf(stderr, "invalid mode\n");
+                    return 1;
+                }
+                break;
+            case 't':
+                tokens = optarg;
+                break;
+            default:
+                summary(argv[0]);
+                return 1;
+        };
+    };
+    if (optind >= argc) {
+        fprintf(stderr, "required parameter endpoint not provided\n");
+        return 1;
+    }
+    endpoint = argv[optind];
+
+
     void *context = zmq_ctx_new();
     if (!context) {
         perror("new context");
